@@ -1,9 +1,12 @@
 # Storeconfigs
 storeconfigs              = true
+storeconfigs_backend      = <%= backend %>
+<%- if backend == 'active_record' -%>
 dbadapter                 = <%= dbadapter %>
 dbuser                    = <%= dbuser %>
 dbpassword                = <%= dbpassword %>
 dbserver                  = <%= dbserver %>
 dbsocket                  = <%= dbsocket %>
 dbmigrate                 = true
+<%- end -%>
 

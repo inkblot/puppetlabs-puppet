@@ -12,6 +12,7 @@
 #
 class puppet::storeconfigs (
     $puppet_conf = $::puppet::params::puppet_conf,
+    $backend     = $::puppet::params::storeconfigs_backend,
     $dbadapter,
     $dbuser,
     $dbpassword,
@@ -23,18 +24,20 @@ class puppet::storeconfigs (
   # This ensure should be fixed.
   Package['activerecord'] -> Class['puppet::storeconfigs']
 
-  case $dbadapter {
-    'sqlite3': {
-      include puppet::storeconfigs::sqlite
-    }
-    'mysql': {
-      class {
-        "puppet::storeconfigs::mysql":
-          dbuser     => $dbuser,
-          dbpassword => $dbpassword,
+  if $backend == 'active_record'
+    case $dbadapter {
+      'sqlite3': {
+        include puppet::storeconfigs::sqlite
       }
+      'mysql': {
+        class {
+          "puppet::storeconfigs::mysql":
+            dbuser     => $dbuser,
+            dbpassword => $dbpassword,
+        }
+      }
+      default: { err("target dbadapter $dbadapter not implemented") }
     }
-    default: { err("target dbadapter $dbadapter not implemented") }
   }
 
   concat::fragment { 'puppet.conf-master-storeconfig':
