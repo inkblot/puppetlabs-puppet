@@ -24,7 +24,7 @@ class puppet::storeconfigs (
   # This ensure should be fixed.
   Package['activerecord'] -> Class['puppet::storeconfigs']
 
-  if $backend == 'active_record'
+  if $backend == 'active_record' {
     case $dbadapter {
       'sqlite3': {
         include puppet::storeconfigs::sqlite
