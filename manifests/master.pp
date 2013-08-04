@@ -140,7 +140,7 @@ class puppet::master (
       priority        => '40',
       docroot         => $puppet_docroot,
       custom_fragment => template('puppet/vhost-custom-fragment.erb'),
-      rack_base_uris  => '/'
+      rack_base_uris  => '/',
       ssl             => true,
       ssl_cert        => "${puppet_ssldir}/certs/${certname}.pem",
       ssl_key         => "${puppet_ssldir}/private_keys/${certname}.pem",
