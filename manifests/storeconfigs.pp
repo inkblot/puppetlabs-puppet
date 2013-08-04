@@ -26,19 +26,20 @@ class puppet::storeconfigs (
     # This ensure should be fixed.
     Package['activerecord'] -> Class['puppet::storeconfigs']
 
-  if $paternalistic {
-    case $dbadapter {
-      'sqlite3': {
-        include puppet::storeconfigs::sqlite
-      }
-      'mysql': {
-        class {
-          "puppet::storeconfigs::mysql":
-            dbuser     => $dbuser,
-            dbpassword => $dbpassword,
+    if $paternalistic {
+      case $dbadapter {
+        'sqlite3': {
+          include puppet::storeconfigs::sqlite
         }
+        'mysql': {
+          class {
+            "puppet::storeconfigs::mysql":
+              dbuser     => $dbuser,
+              dbpassword => $dbpassword,
+          }
+        }
+        default: { err("target dbadapter $dbadapter not implemented") }
       }
-      default: { err("target dbadapter $dbadapter not implemented") }
     }
   }
 
