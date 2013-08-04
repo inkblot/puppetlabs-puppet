@@ -67,6 +67,7 @@ class puppet::master (
   $templatedir = $::puppet::params::templatedir,
   $reporting = true,
   $storeconfigs = false,
+  $storeconfigs_backend = $::puppet::params::storeconfigs_backend,
   $storeconfigs_dbadapter = $::puppet::params::storeconfigs_dbadapter,
   $storeconfigs_dbuser = $::puppet::params::storeconfigs_dbuser,
   $storeconfigs_dbpassword = $::puppet::params::storeconfigs_dbpassword,
