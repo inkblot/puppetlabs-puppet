@@ -17,7 +17,8 @@ class puppet::storeconfigs (
     $dbuser,
     $dbpassword,
     $dbserver,
-    $dbsocket
+    $dbsocket,
+    $paternalistic = true,
 ) {
 
   if $backend == 'active_record' {
@@ -25,6 +26,7 @@ class puppet::storeconfigs (
     # This ensure should be fixed.
     Package['activerecord'] -> Class['puppet::storeconfigs']
 
+  if $paternalistic {
     case $dbadapter {
       'sqlite3': {
         include puppet::storeconfigs::sqlite
