@@ -134,13 +134,19 @@ class puppet::master (
     }
 
     apache::vhost { "puppet-${puppet_site}":
-      servername => $puppet_site,
-      port       => $puppet_passenger_port,
-      priority   => '40',
-      docroot    => $puppet_docroot,
-      template   => 'puppet/apache2.conf.erb',
-      require    => [ File["${confdir}/rack/config.ru"], File[$puppet_conf] ],
-      ssl        => true,
+      servername      => $puppet_site,
+      port            => $puppet_passenger_port,
+      priority        => '40',
+      docroot         => $puppet_docroot,
+      custom_fragment => template('puppet/vhost-custom-fragment.erb'),
+      rack_base_uris  => '/'
+      ssl             => true,
+      ssl_cert        => "${puppet_ssldir}/certs/${certname}.pem",
+      ssl_key         => "${puppet_ssldir}/private_keys/${certname}.pem",
+      ssl_chain       => "${puppet_ssldir}/certs/ca.pem",
+      ssl_ca          => "${puppet_ssldir}/certs/ca.pem",
+      ssl_crl         => "${puppet_ssldir}/crl.pem",
+      require         => [ File["${confdir}/rack/config.ru"], File[$puppet_conf] ],
     }
 
     file { "${confdir}/rack":
