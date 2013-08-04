@@ -118,19 +118,14 @@ class puppet::master (
 
   if $puppet_passenger {
     $service_notify  = Service['httpd']
-    $service_require = [Package[$puppet_master_package], Class['passenger']]
+    $service_require = Package[$puppet_master_package]
 
     exec { "Certificate_Check":
       command   => "puppet cert --generate ${certname} --trace",
       unless    => "/bin/ls ${puppet_ssldir}/certs/${certname}.pem",
       path      => "/usr/bin:/usr/local/bin",
-      before    => Class['::passenger'],
       require   => Package[$puppet_master_package],
       logoutput => on_failure,
-    }
-
-    if ! defined(Class['passenger']) {
-      class { '::passenger': }
     }
 
     apache::vhost { "puppet-${puppet_site}":
