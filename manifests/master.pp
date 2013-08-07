@@ -145,7 +145,7 @@ class puppet::master (
       ssl_ca          => "${puppet_ssldir}/certs/ca.pem",
       ssl_certs_dir   => "${puppet_ssldir}/ca",
       ssl_crl         => "${puppet_ssldir}/crl.pem",
-      custom_fragment => template('puppet/vhost-custom-fragment.erb')
+      custom_fragment => template('puppet/vhost-custom-fragment.erb'),
       require         => [ File["${confdir}/rack/config.ru"], File[$puppet_conf] ],
     }
 
