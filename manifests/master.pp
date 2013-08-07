@@ -134,14 +134,18 @@ class puppet::master (
       port            => $puppet_passenger_port,
       priority        => '40',
       docroot         => $puppet_docroot,
-      custom_fragment => template('puppet/vhost-custom-fragment.erb'),
+      options         => [ 'None' ],
+      error_log       => false,
+      access_log      => false,
       rack_base_uris  => '/',
       ssl             => true,
       ssl_cert        => "${puppet_ssldir}/certs/${certname}.pem",
       ssl_key         => "${puppet_ssldir}/private_keys/${certname}.pem",
       ssl_chain       => "${puppet_ssldir}/certs/ca.pem",
       ssl_ca          => "${puppet_ssldir}/certs/ca.pem",
+      ssl_certs_dir   => "${puppet_ssldir}/ca",
       ssl_crl         => "${puppet_ssldir}/crl.pem",
+      custom_fragment => template('puppet/vhost-custom-fragment.erb')
       require         => [ File["${confdir}/rack/config.ru"], File[$puppet_conf] ],
     }
 
