@@ -101,6 +101,7 @@ class puppet::master (
   if $storeconfigs {
     class { 'puppet::storeconfigs':
       puppet_conf   => $puppet_conf,
+      backend       => $storeconfigs_backend,
       dbadapter     => $storeconfigs_dbadapter,
       dbuser        => $storeconfigs_dbuser,
       dbpassword    => $storeconfigs_dbpassword,
