@@ -23,6 +23,7 @@ class puppet::params {
   $storeconfigs_dbsocket            = '/var/run/mysqld/mysqld.sock'
   $certname                         = downcase($::fqdn)
   $confdir                          = '/etc/puppet'
+  $configtimeout                    = '120'
   $manifest                         = '/etc/puppet/manifests/site.pp'
   $templatedir                      = '$confdir/templates'
   $puppet_site                      = downcase($::fqdn)

@@ -12,6 +12,8 @@
 #                               should be setup
 #   [*reporting*]             - Turn reporting on or off
 #   [*confdir*]               - The confdir configuration value in puppet.conf
+#   [*configtimeout*]         - Time limit for the execution by puppet clients 
+#                               in puppet.conf
 #   [*manifest*]              - The manifest configuration value in puppet.conf
 #   [*templatedir*]           - The path to templates
 #   [*certname*]              - The certname configuration value in puppet.conf
@@ -85,6 +87,7 @@ class puppet (
   $agent                    = true,
   $reporting                = true,
   $confdir                  = $puppet::params::confdir,
+  $configtimeout            = $puppet::params::configtimeout,
   $manifest                 = $puppet::params::manifest,
   $templatedir              = $puppet::params::templatedir,
   $modulepath               = $puppet::params::modulepath,
@@ -152,6 +155,7 @@ class puppet (
     class {'puppet::master':
       version                   => $version,
       confdir                   => $confdir,
+      configtimeout		=> $configtimeout,
       puppet_conf               => $puppet_conf,
       puppet_passenger          => $puppet_passenger,
       puppet_site               => $puppet_site,
@@ -189,6 +193,7 @@ class puppet (
       puppet_agent_name         => $puppet_agent_name,
       package_provider          => $package_provider,
       reporting                 => $reporting,
+      configtimeout             => $configtimeout, 
     }
   }
 

@@ -6,6 +6,8 @@
 #   [*modulepath*]            - The modulepath configuration value used in
 #                               puppet.conf
 #   [*confdir*]               - The confdir configuration value in puppet.conf
+#   [*configtimeout*]         - Time limit for the execution by puppet clients 
+#                               in puppet.conf
 #   [*manifest*]              - The manifest configuration value in puppet.conf
 #   [*templatedir*]           - The path to templates
 #   [*reporting*]             - Turn reporting on or off
@@ -62,6 +64,7 @@
 class puppet::master (
   $modulepath = $::puppet::params::modulepath,
   $confdir = $::puppet::params::confdir,
+  $configtimeout = $::puppet::params::configtimeout,
   $puppet_conf = $::puppet::params::puppet_conf,
   $manifest = $::puppet::params::manifest,
   $templatedir = $::puppet::params::templatedir,
