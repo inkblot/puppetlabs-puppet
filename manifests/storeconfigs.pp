@@ -12,6 +12,7 @@
 #
 class puppet::storeconfigs (
     $puppet_conf = $::puppet::params::puppet_conf,
+    $backend     = $::puppet::params::storeconfigs_backend,
     $dbadapter,
     $dbuser,
     $dbpassword,
@@ -20,23 +21,25 @@ class puppet::storeconfigs (
     $paternalistic = true,
 ) {
 
-  # This version of activerecord works with Ruby 1.8.5 and Centos 5.
-  # This ensure should be fixed.
-  Package['activerecord'] -> Class['puppet::storeconfigs']
+  if $backend == 'active_record' {
+    # This version of activerecord works with Ruby 1.8.5 and Centos 5.
+    # This ensure should be fixed.
+    Package['activerecord'] -> Class['puppet::storeconfigs']
 
-  if $paternalistic {
-    case $dbadapter {
-      'sqlite3': {
-        include puppet::storeconfigs::sqlite
-      }
-      'mysql': {
-        class {
-          "puppet::storeconfigs::mysql":
-            dbuser     => $dbuser,
-            dbpassword => $dbpassword,
+    if $paternalistic {
+      case $dbadapter {
+        'sqlite3': {
+          include puppet::storeconfigs::sqlite
         }
+        'mysql': {
+          class {
+            "puppet::storeconfigs::mysql":
+              dbuser     => $dbuser,
+              dbpassword => $dbpassword,
+          }
+        }
+        default: { err("target dbadapter $dbadapter not implemented") }
       }
-      default: { err("target dbadapter $dbadapter not implemented") }
     }
   }
 

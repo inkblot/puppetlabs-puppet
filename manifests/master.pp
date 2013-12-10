@@ -67,6 +67,7 @@ class puppet::master (
   $templatedir = $::puppet::params::templatedir,
   $reporting = true,
   $storeconfigs = false,
+  $storeconfigs_backend = $::puppet::params::storeconfigs_backend,
   $storeconfigs_dbadapter = $::puppet::params::storeconfigs_dbadapter,
   $storeconfigs_dbuser = $::puppet::params::storeconfigs_dbuser,
   $storeconfigs_dbpassword = $::puppet::params::storeconfigs_dbpassword,
@@ -100,6 +101,7 @@ class puppet::master (
   if $storeconfigs {
     class { 'puppet::storeconfigs':
       puppet_conf   => $puppet_conf,
+      backend       => $storeconfigs_backend,
       dbadapter     => $storeconfigs_dbadapter,
       dbuser        => $storeconfigs_dbuser,
       dbpassword    => $storeconfigs_dbpassword,
@@ -118,29 +120,34 @@ class puppet::master (
 
   if $puppet_passenger {
     $service_notify  = Service['httpd']
-    $service_require = [Package[$puppet_master_package], Class['passenger']]
+    $service_require = Package[$puppet_master_package]
 
     exec { "Certificate_Check":
       command   => "puppet cert --generate ${certname} --trace",
       unless    => "/bin/ls ${puppet_ssldir}/certs/${certname}.pem",
       path      => "/usr/bin:/usr/local/bin",
-      before    => Class['::passenger'],
       require   => Package[$puppet_master_package],
       logoutput => on_failure,
     }
 
-    if ! defined(Class['passenger']) {
-      class { '::passenger': }
-    }
-
     apache::vhost { "puppet-${puppet_site}":
-      servername => $puppet_site,
-      port       => $puppet_passenger_port,
-      priority   => '40',
-      docroot    => $puppet_docroot,
-      template   => 'puppet/apache2.conf.erb',
-      require    => [ File["${confdir}/rack/config.ru"], File[$puppet_conf] ],
-      ssl        => true,
+      servername      => $puppet_site,
+      port            => $puppet_passenger_port,
+      priority        => '40',
+      docroot         => $puppet_docroot,
+      options         => [ 'None' ],
+      error_log       => false,
+      access_log      => false,
+      rack_base_uris  => '/',
+      ssl             => true,
+      ssl_cert        => "${puppet_ssldir}/certs/${certname}.pem",
+      ssl_key         => "${puppet_ssldir}/private_keys/${certname}.pem",
+      ssl_chain       => "${puppet_ssldir}/certs/ca.pem",
+      ssl_ca          => "${puppet_ssldir}/certs/ca.pem",
+      ssl_certs_dir   => "${puppet_ssldir}/ca",
+      ssl_crl         => "${puppet_ssldir}/crl.pem",
+      custom_fragment => template('puppet/vhost-custom-fragment.erb'),
+      require         => [ File["${confdir}/rack/config.ru"], File[$puppet_conf] ],
     }
 
     file { "${confdir}/rack":
