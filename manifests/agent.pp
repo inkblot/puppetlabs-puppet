@@ -18,6 +18,7 @@ class puppet::agent(
   $puppet_agent_name = $::puppet::params::puppet_agent_name,
   $puppet_conf = $::puppet::params::puppet_conf,
   $package_provider = undef,
+  $configtimeout = $::puppet::params::configtimeout,
   $reporting = true,
   $version = 'present'
 ) inherits puppet::params {
