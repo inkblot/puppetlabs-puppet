@@ -68,6 +68,7 @@ class puppet::master (
   $puppet_conf = $::puppet::params::puppet_conf,
   $manifest = $::puppet::params::manifest,
   $templatedir = $::puppet::params::templatedir,
+  $hiera_config = $::puppet::params::hiera_config,
   $reporting = true,
   $storeconfigs = false,
   $storeconfigs_backend = $::puppet::params::storeconfigs_backend,

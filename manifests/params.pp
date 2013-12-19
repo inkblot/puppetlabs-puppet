@@ -16,6 +16,7 @@ class puppet::params {
   $environment                      = 'production'
   $puppet_storeconfigs_password     = 'password'
   $modulepath                       = "/etc/puppet/modules"
+  $hiera_config                     = '/etc/puppet/hiera.yaml'
   $storeconfigs_backend             = 'active_record'
   $storeconfigs_dbadapter           = 'mysql'
   $storeconfigs_dbuser              = 'puppet'
