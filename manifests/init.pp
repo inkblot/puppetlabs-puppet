@@ -25,7 +25,6 @@
 #   [*puppet_logdir*]         - The path to the puppet log
 #   [*puppet_vardir*]         - The path to the puppet vardir
 #   [*puppet_defaults*]       - The path to your distro's puppet defaults file
-#   [*puppet_master_service*] - The name of the puppet master service
 #   [*puppet_agent_service*]  - The name of the puppet agent service
 #   [*puppet_passenger*]      - Boolean value to determine whether puppet is
 #                               to be run with Passenger
@@ -44,7 +43,6 @@
 #   [*storeconfigs_dbsocket*]   - The path to the mysql socket file
 #   [*install_mysql_pkgs*]      - Boolean determining whether mysql and related
 #                                 devel packages should be installed.
-#   [*puppet_master_package*]   - The name of the puppet master package
 #   [*package_provider*]        - The provider used for package installation
 #   [*user_id*]                 - The UID of the puppet user
 #   [*group_id*]                - The GID of the puppet group
@@ -96,7 +94,6 @@ class puppet (
   $puppet_vardir            = $puppet::params::puppet_vardir,
   $puppet_ssldir            = $puppet::params::puppet_ssldir,
   $puppet_defaults          = $puppet::params::puppet_defaults,
-  $puppet_master_service    = $puppet::params::puppet_master_service,
   $puppet_agent_service     = $puppet::params::puppet_agent_service,
   $puppet_server            = $puppet::params::puppet_server,
   $environment              = $puppet::params::environment,
@@ -114,7 +111,6 @@ class puppet (
   $certname                 = $puppet::params::certname,
   $install_mysql_pkgs       = false,
   $autosign                 = false,
-  $puppet_master_package    = $puppet::params::puppet_master_package,
   $package_provider         = undef,
   $user_id                  = undef,
   $group_id                 = undef,
@@ -177,8 +173,6 @@ class puppet (
       autosign                  => $autosign,
       manifest                  => $manifest,
       templatedir               => $templatedir,
-      puppet_master_service     => $puppet_master_service,
-      puppet_master_package     => $puppet_master_package,
       package_provider          => $package_provider,
       dashboard_port            => $dashboard_port,
       paternalistic             => $paternalistic,

@@ -85,13 +85,19 @@ class puppet::master (
   $puppet_docroot = $::puppet::params::puppet_docroot,
   $puppet_vardir = $::puppet::params::puppet_vardir,
   $puppet_passenger_port = false,
-  $puppet_master_package = $::puppet::params::puppet_master_package,
   $package_provider = undef,
-  $puppet_master_service = $::puppet::params::puppet_master_service,
   $version = 'present',
   $paternalistic = true,
 
 ) inherits puppet::params {
+
+  if $puppet_passenger {
+    $puppet_master_package = 'puppetmaster-passenger'
+    $puppet_master_service = $::puppet::params::apache_service
+  } else {
+    $puppet_master_package = 'puppetmaster'
+    $puppet_master_service = 'puppetmaster'
+  }
 
   File {
     require => Package[$puppet_master_package],
@@ -120,7 +126,7 @@ class puppet::master (
   }
 
   if $puppet_passenger {
-    $service_notify  = Service['httpd']
+    $service_notify  = Service[$puppet_master_service]
     $service_require = Package[$puppet_master_package]
 
     exec { "Certificate_Check":
@@ -148,19 +154,7 @@ class puppet::master (
       ssl_certs_dir   => "${puppet_ssldir}/ca",
       ssl_crl         => "${puppet_ssldir}/crl.pem",
       custom_fragment => template('puppet/vhost-custom-fragment.erb'),
-      require         => [ File["${confdir}/rack/config.ru"], File[$puppet_conf] ],
-    }
-
-    file { "${confdir}/rack":
-      ensure => directory,
-      mode   => '0755',
-    }
-
-    file { "${confdir}/rack/config.ru":
-      ensure => present,
-      source => $puppet::params::rack_config_source,
-      mode   => '0644',
-      require => Package[$puppet_master_package],
+      require         => [ Package[$puppet_master_package], File[$puppet_conf] ],
     }
   } else {
 

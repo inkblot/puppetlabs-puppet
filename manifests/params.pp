@@ -34,8 +34,6 @@ class puppet::params {
 
   case $::operatingsystem {
     'centos', 'redhat', 'fedora', 'scientific': {
-      $puppet_master_package        = 'puppet'
-      $puppet_master_service        = 'puppetmaster'
       $puppet_agent_service         = 'puppet'
       $puppet_agent_name            = 'puppet'
       $puppet_defaults              = '/etc/sysconfig/puppet'
@@ -46,10 +44,9 @@ class puppet::params {
       $puppet_vardir                = '/var/lib/puppet'
       $puppet_ssldir                = '/var/lib/puppet/ssl'
       $rack_config_source           = "puppet:///modules/puppet/config.ru"
+      $apache_service               = 'httpd'
     }
     'ubuntu', 'debian': {
-      $puppet_master_package        = 'puppet'
-      $puppet_master_service        = 'puppetmaster'
       $puppet_agent_service         = 'puppet'
       $puppet_agent_name            = 'puppet'
       $puppet_defaults              = '/etc/default/puppet'
@@ -60,6 +57,7 @@ class puppet::params {
       $puppet_vardir                = '/var/lib/puppet'
       $puppet_ssldir                = '/var/lib/puppet/ssl'
       $rack_config_source           = '/usr/share/puppet/ext/rack/files/config.ru'
+      $apache_service               = 'apache2'
     }
     'freebsd': {
       $puppet_agent_service         = 'puppet'
