@@ -118,11 +118,15 @@ class puppet::master (
     }
   }
 
-  if ! defined(Package[$puppet_master_package]) {
-    package { $puppet_master_package:
-      ensure   => $version,
-      provider => $package_provider,
-    }
+  package { 'puppetmaster-common':
+    ensure   => $version,
+    provider => $package_provider,
+  }
+
+  package { $puppet_master_package:
+    ensure   => $version,
+    provider => $package_provider,
+    require  => Package['puppetmaster-common'],
   }
 
   if $puppet_passenger {

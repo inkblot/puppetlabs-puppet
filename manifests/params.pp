@@ -29,7 +29,7 @@ class puppet::params {
   $manifest                         = '/etc/puppet/manifests/site.pp'
   $templatedir                      = '$confdir/templates'
   $puppet_site                      = downcase($::fqdn)
-  $puppet_docroot                   = '/etc/puppet/rack/public/'
+  $puppet_docroot                   = '/usr/share/puppet/rack/puppetmasterd/public/'
   $puppet_passenger_port            = '8140'
 
   case $::operatingsystem {
